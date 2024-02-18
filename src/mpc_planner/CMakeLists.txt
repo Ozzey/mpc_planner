@@ -12,23 +12,28 @@ find_package(catkin REQUIRED COMPONENTS
         sensor_msgs
         )
 
+find_package(
+        Eigen3 REQUIRED
+)
+
+
 set(acados_include "/mnt/c/Users/91919/acados/include")
 set(acados_lib "/mnt/c/Users/91919/acados/lib")
+set(model_path "/mnt/c/Users/91919/mpc_planner/src/mpc_planner/scripts/c_generated_code")
 
 include_directories(
         include
         ${catkin_INCLUDE_DIRS}
         scripts/c_generated_code
-        ${PROJECT_SOURCE_DIR}/scripts/c_generated_code/bicycle_model_model
-        ${PROJECT_SOURCE_DIR}/scripts/c_generated_code/bicycle_model_cost
+        ${PROJECT_SOURCE_DIR}/scripts/c_generated_code/mobile_robot_model
+        ${PROJECT_SOURCE_DIR}/scripts/c_generated_code/mobile_robot_cost
         ${PROJECT_SOURCE_DIR}/scripts/c_generated_code
         ${acados_include}
-        ${acados_include}/blasfeo/include
-        ${acados_include}/hpipm/include
+        ${acados_include}/blasfeo/include/
+        ${acados_include}/hpipm/include/
         ${acados_include}/acados/
-        ${acados_include}/qpOASES_e
+        ${acados_include}/qpOASES_e/
 )
-
 
 catkin_package(
 
@@ -37,8 +42,10 @@ catkin_package(
 link_directories(${PROJECT_SOURCE_DIR}/scripts/c_generated_code)
 
 add_executable(mpc_planner src/main.cpp)
+
 target_link_libraries(mpc_planner
-        ${PROJECT_SOURCE_DIR}/scripts/c_generated_code/libacados_ocp_solver_robot_model.so
+        ${model_path}/libacados_ocp_solver_mobile_robot.so
+        ${acados_lib}/libblasfeo.so
         ${acados_lib}/libacados.so
         ${catkin_LIBRARIES}
         )
